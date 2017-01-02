@@ -154,6 +154,10 @@ ifneq ($(TARGET_DISABLE_CMSDK), true)
 include vendor/cm/config/cmsdk_common.mk
 endif
 
+# Bootanimation
+#PRODUCT_PACKAGES += \
+#    bootanimation.zip
+
 # Required CM packages
 PRODUCT_PACKAGES += \
     BluetoothExt \
@@ -199,7 +203,16 @@ PRODUCT_PACKAGES += \
 
 # Extra tools in CM
 PRODUCT_PACKAGES += \
+    7z \
+    bash \
+    bzip2 \
+    curl \
+    fsck.ntfs \
+    gdbserver \
+    htop \
+    lib7z \
     libsepol \
+    micro_bench \
     mke2fs \
     tune2fs \
     nano \
@@ -210,6 +223,8 @@ PRODUCT_PACKAGES += \
     gdbserver \
     micro_bench \
     oprofiled \
+    pigz \
+    powertop \
     sqlite3 \
     strace \
     pigz \
@@ -316,7 +331,9 @@ ifeq ($(OTA_PACKAGE_SIGNING_KEY),)
         vendor/cm/build/target/product/security/cm-devkey
 endif
 
-CM_DISPLAY_VERSION := $(CM_VERSION)
+-include vendor/cm-priv/keys/keys.mk
+
+CM_DISPLAY_VERSION := $(LINEAGE_VERSION)
 
 PRODUCT_PROPERTY_OVERRIDES += \
   ro.rr.display.version=$(CM_DISPLAY_VERSION)

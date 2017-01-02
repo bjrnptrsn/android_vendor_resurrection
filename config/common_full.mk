@@ -2,3 +2,7 @@
 $(call inherit-product, vendor/cm/config/common.mk)
 
 PRODUCT_SIZE := full
+
+# Themes
+PRODUCT_PACKAGES += \
+    HexoLibre

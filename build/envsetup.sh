@@ -7,9 +7,9 @@ Additional LineageOS functions:
 - mmmp:            Builds all of the modules in the supplied directories and pushes them to the device.
 - mms:             Short circuit builder. Quickly re-build the kernel, rootfs, boot and system images
                    without deep dependencies. Requires the full build to have run before.
-- cmgerrit:        A Git wrapper that fetches/pushes patch from/to CM Gerrit Review.
+- cmgerrit:        A Git wrapper that fetches/pushes patch from/to LineageOS Gerrit Review.
 - cmrebase:        Rebase a Gerrit change and push it again.
-- cmremote:        Add git remote for CM Gerrit Review.
+- cmremote:        Add git remote for LineageOS Gerrit Review.
 - aospremote:      Add git remote for matching AOSP repository.
 - cafremote:       Add git remote for matching CodeAurora repository.
 - mka:             Builds using SCHED_BATCH on all processors.
@@ -42,7 +42,7 @@ function breakfast()
     local variant=$2
     CM_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
-    #add_lunch_combo full-eng
+    add_lunch_combo full-eng
     for f in `/bin/ls vendor/cm/vendorsetup.sh 2> /dev/null`
         do
             echo "including $f"
@@ -59,11 +59,16 @@ function breakfast()
             # A buildtype was specified, assume a full device name
             lunch $target
         else
-            # This is probably just the CM model name
+            # This is probably just the Lineage model name
             if [ -z "$variant" ]; then
                 variant="userdebug"
             fi
-            lunch cm_$target-$variant
+            lunch lineage_$target-$variant
+            if [ $? -ne 0 ]; then
+                # try CM
+                echo "** Warning: '$target' is using CM-based makefiles. This will be deprecated in the next major release."
+                lunch cm_$target-$variant
+            fi
         fi
     fi
     return $?
@@ -74,8 +79,8 @@ alias bib=breakfast
 function eat()
 {
     if [ "$OUT" ] ; then
-        MODVERSION=$(get_build_var CM_VERSION)
-        ZIPFILE=$MODVERSION.zip
+        MODVERSION=$(get_build_var LINEAGE_VERSION)
+        ZIPFILE=lineage-$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
             echo "Nothing to eat"
