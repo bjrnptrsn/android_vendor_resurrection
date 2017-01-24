@@ -36,7 +36,6 @@ endif
 LOCAL_SRC_FILES := ../../../external/gello-build/Gello.apk
 include $(BUILD_PREBUILT)
 else
-
 LOCAL_DEX_PREOPT := false
 LOCAL_MODULE_TAGS := optional
 LOCAL_BUILT_MODULE_STEM := package.apk
