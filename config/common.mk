@@ -197,6 +197,18 @@ PRODUCT_PACKAGES += \
     OmniJaws \
     ThemeInterfacer
 
+
+WITH_ROOT_METHOD ?= rootless
+ifeq ($(WITH_ROOT_METHOD), magisk)
+# Magisk Manager
+PRODUCT_PACKAGES += \
+    MagiskManager
+
+# Copy Magisk zip
+PRODUCT_COPY_FILES += \
+    vendor/cm/prebuilt/common/magisk.zip:system/addon.d/magisk.zip
+endif
+
 # Exchange support
 PRODUCT_PACKAGES += \
     Exchange2
@@ -262,9 +274,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     rsync
 
-# Stagefright FFMPEG plugin
+#Stagefright FFMPEG plugin
 PRODUCT_PACKAGES += \
-    libffmpeg_extractor \
+     libffmpeg_extractor \
     libffmpeg_omx \
     media_codecs_ffmpeg.xml
 
@@ -296,16 +308,13 @@ PRODUCT_PACKAGES += \
 endif
 endif
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.root_access=2
-
 DEVICE_PACKAGE_OVERLAYS += vendor/cm/overlay/common
 
 PRODUCT_VERSION = 5.8.3
 ifneq ($(RR_BUILDTYPE),)
-RR_VERSION := RR-N-v$(PRODUCT_VERSION)-$(shell date -u +%Y%m%d)-$(CM_BUILD)-$(RR_BUILDTYPE)_tyler
+RR_VERSION := RR-N-v$(PRODUCT_VERSION)-$(shell date -u +%Y%m%d)-$(CM_BUILD)-$(RR_BUILDTYPE)
 else
-RR_VERSION := RR-N-v$(PRODUCT_VERSION)-$(shell date -u +%Y%m%d)-$(CM_BUILD)_tyler
+RR_VERSION := RR-N-v$(PRODUCT_VERSION)-$(shell date -u +%Y%m%d)-$(CM_BUILD)
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
